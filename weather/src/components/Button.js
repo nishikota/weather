@@ -1,5 +1,5 @@
 import countryCity from "../api/countryCity";
-import {fetchApi} from "../api/GetApi.js";
+import {fetchApi} from "./ApiResult";
 
 const onClickButton = (userInputWord, fetchApi) => {
   console.log(userInputWord);

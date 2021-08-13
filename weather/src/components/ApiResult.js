@@ -17,26 +17,65 @@ import {
   FaCloud,
   FaRegEyeSlash,
 } from "react-icons/fa";
-import {tokyoData, fetchData} from "../api/GetApi";
+// import {tokyoData, fetchData} from "../api/GetApi";
+
+//ApiGet
+
+import axios from "axios";
+import ApiKey from "../Secret";
+// import testData from "../api/testData.js";
+
+const API_END_POINT = "https://api.openweathermap.org/data/2.5/weather";
+
+// const firstData = async () => {
+//   console.log("firstData:Done");
+//   const word = "Tokyo";
+//   const response = await axios.get(
+//     `${API_END_POINT}?q=${word}&appid=${ApiKey}`
+//   );
+//   const firstResponseObject = response.data;
+//   console.log(response.data);
+//   return firstResponseObject;
+// firstResponseObject = await testData;
+// console.log("firstResponseObject", firstResponseObject);
+// };
+
+// console.log(firstResponseObject);
+
+const fetchWeather = async (word) => {
+  console.log("fetchData:", word);
+  const response = await axios.get(
+    word === undefined || word === ""
+      ? `${API_END_POINT}?q=Tokyo&appid=${ApiKey}`
+      : `${API_END_POINT}?q=${word}&appid=${ApiKey}`
+  );
+  const fetchResponseObject = response.data;
+  console.log(fetchResponseObject);
+  return fetchResponseObject;
+};
+
+export const fetchApi = fetchWeather;
+
+//
 
 const ApiResult = () => {
-  console.log(tokyoData, ":", fetchData);
-  // const [weatherData, setWeatherData] = useState();
-  // if (fetchData) {
-  //   console.log("fetch");
-  //   setWeatherData(fetchData);
+  // console.log(firstResponseObject, ":", fetchResponseObject);
+  console.log("ApiResult");
+  const [weatherData, setWeatherData] = useState();
+
+  // useEffect(() => {
+  console.log("Effect");
+  const ResponseObject = fetchWeather();
+  console.log(ResponseObject);
+  setWeatherData(ResponseObject);
+  // }, []);
+
+  // let weatherData;
+  // if (fetchResponseObject) {
+  //   weatherData = fetchResponseObject;
   // } else {
-  //   console.log("first");
-  //   setWeatherData(tokyoData);
+  //   weatherData = firstResponseObject;
   // }
-  // console.log(weatherData);
-  // console.log(tokyoData);
-  let weatherData;
-  if (fetchData) {
-    weatherData = fetchData;
-  } else {
-    weatherData = tokyoData;
-  }
   let whichIcon;
   if (weatherData.weather[0].main === "Clouds") {
     whichIcon = <FaCloud style={styles.icons} />;

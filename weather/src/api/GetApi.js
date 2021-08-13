@@ -24,6 +24,6 @@ const fetchWeather = async (word) => {
   fetchResponseObject = await response.data;
 };
 
-export const tokyoData = firstResponseObject;
-export const fetchApi = fetchWeather;
-export const fetchData = fetchResponseObject;
+// export const tokyoData = firstResponseObject;
+// export const fetchApi = fetchWeather;
+// export const fetchData = fetchResponseObject;
