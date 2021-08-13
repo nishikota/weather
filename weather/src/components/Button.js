@@ -1,9 +1,11 @@
 import countryCity from "../api/countryCity";
-const onClickButton = (userInputWord, searchCity) => {
-  console.log(userInputWord, ":", searchCity);
+import {fetchApi} from "../api/GetApi.js";
+
+const onClickButton = (userInputWord, fetchApi) => {
+  console.log(userInputWord);
   try {
     if (countryCity.includes(userInputWord) || userInputWord === "") {
-      searchCity(userInputWord);
+      fetchApi(userInputWord);
       console.log("success");
     } else {
       throw new Error("error:nodata");
@@ -13,12 +15,12 @@ const onClickButton = (userInputWord, searchCity) => {
   }
 };
 
-const Button = ({userInputWord, searchCity}) => {
+const Button = ({userInputWord}) => {
   return (
     <>
       <button
         style={styles.button}
-        onClick={() => onClickButton(userInputWord, searchCity)}
+        onClick={() => onClickButton(userInputWord, fetchApi)}
       >
         <div style={styles.word}>Search</div>
       </button>

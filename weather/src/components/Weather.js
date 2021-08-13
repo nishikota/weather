@@ -1,16 +1,11 @@
-import {useState} from "react";
+import ApiResult from "./ApiResult";
 import UserInput from "./UserInput";
-import GetApi from "./GetApi";
 
 const Weather = () => {
-  const [searchWord, setSearchWord] = useState("");
-  const searchCity = (inputWord) => {
-    setSearchWord(inputWord);
-  };
   return (
     <>
-      <UserInput searchCity={searchCity} />
-      <GetApi searchWord={searchWord} />
+      <UserInput />
+      <ApiResult />
     </>
   );
 };

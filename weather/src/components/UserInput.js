@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import Button from "./Button";
 
-const UserInput = ({searchCity}) => {
+const UserInput = () => {
   const [userInputWord, setUserInputWord] = useState("");
   const inputWord = (word) => {
     const character = /^[a-zA-Z]*$/;
@@ -30,7 +30,7 @@ const UserInput = ({searchCity}) => {
         </p>
       )) ||
         (userInputWord !== "syntaxError" && (
-          <Button userInputWord={userInputWord} searchCity={searchCity} />
+          <Button userInputWord={userInputWord} />
         ))}
     </div>
   );

@@ -1,3 +1,4 @@
+import React, {useState, useEffect} from "react";
 import {
   clearSky,
   drizzle,
@@ -16,73 +17,90 @@ import {
   FaCloud,
   FaRegEyeSlash,
 } from "react-icons/fa";
+import {tokyoData, fetchData} from "../api/GetApi";
 
-const ApiResult = ({results}) => {
+const ApiResult = () => {
+  console.log(tokyoData, ":", fetchData);
+  // const [weatherData, setWeatherData] = useState();
+  // if (fetchData) {
+  //   console.log("fetch");
+  //   setWeatherData(fetchData);
+  // } else {
+  //   console.log("first");
+  //   setWeatherData(tokyoData);
+  // }
+  // console.log(weatherData);
+  // console.log(tokyoData);
+  let weatherData;
+  if (fetchData) {
+    weatherData = fetchData;
+  } else {
+    weatherData = tokyoData;
+  }
   let whichIcon;
-  if (results) {
-    if (results.weather[0].main === "Clouds") {
-      whichIcon = <FaCloud style={styles.icons} />;
-    } else if (results.weather[0].main === "Clear") {
-      whichIcon = <FaRegSun style={styles.icons} />;
-    } else if (results.weather[0].main === "Rain") {
-      whichIcon = <FaUmbrella style={styles.icons} />;
-    } else if (results.weather[0].main === "Snow") {
-      whichIcon = <FaRegSnowflake style={styles.icons} />;
-    } else if (
-      results.weather[0].main !== ("Clear" || "Clouds" || "Rain" || "Snow")
-    ) {
-      whichIcon = <FaRegEyeSlash style={styles.icons} />;
-    }
+  if (weatherData.weather[0].main === "Clouds") {
+    whichIcon = <FaCloud style={styles.icons} />;
+  } else if (weatherData.weather[0].main === "Clear") {
+    whichIcon = <FaRegSun style={styles.icons} />;
+  } else if (weatherData.weather[0].main === "Rain") {
+    whichIcon = <FaUmbrella style={styles.icons} />;
+  } else if (weatherData.weather[0].main === "Snow") {
+    whichIcon = <FaRegSnowflake style={styles.icons} />;
+  } else if (
+    weatherData.weather[0].main !== ("Clear" || "Clouds" || "Rain" || "Snow")
+  ) {
+    whichIcon = <FaRegEyeSlash style={styles.icons} />;
   }
   return (
     <>
-      {results && (
-        <div
-          className="apiResultArea"
-          style={
-            (results.weather[0].main === "Clouds" &&
-              Object.assign({}, styles.backImage, styles.overcastClouds)) ||
-            (results.weather[0].main === "Clear" &&
-              Object.assign({}, styles.backImage, styles.clearSky)) ||
-            (results.weather[0].main === "Rain" &&
-              Object.assign({}, styles.backImage, styles.rain)) ||
-            (results.weather[0].main === "Snow" &&
-              Object.assign({}, styles.backImage, styles.snow)) ||
-            (results.weather[0].main !==
-              ("Clear" || "Clouds" || "Rain" || "Snow") &&
-              Object.assign({}, styles.backImage, styles.mist))
-          }
-        >
-          <div style={styles.name}>{results.name}</div>
-          <div style={styles.results}>
-            <ul style={styles.ul}>
-              <li style={styles.title}>Weather</li>
-              <li style={styles.result}>
-                {results.weather[0].description}
-                {whichIcon}
-              </li>
-            </ul>
-            <ul style={styles.ul}>
-              <li style={styles.title}>Temperature</li>
-              <li
-                style={
-                  (results.main.temp - 273.15 <= 15 &&
-                    Object.assign({}, styles.result, styles.lowTemp)) ||
-                  (results.main.temp - 273.15 >= 25 &&
-                    Object.assign({}, styles.result, styles.highTemp)) ||
-                  Object.assign({}, styles.result, styles.middleTemp)
-                }
-              >
-                {Math.floor((results.main.temp - 273.15) * 10) / 10} ℃
-              </li>
-            </ul>
-            <ul style={styles.ul}>
-              <li style={styles.title}>Wind</li>
-              <li style={styles.result}>{results.wind.speed}</li>
-            </ul>
-          </div>
+      <div
+        className="apiResultArea"
+        style={
+          (weatherData.weather[0].main === "Clouds" &&
+            Object.assign({}, styles.backImage, styles.overcastClouds)) ||
+          (weatherData.weather[0].main === "Clear" &&
+            Object.assign({}, styles.backImage, styles.clearSky)) ||
+          (weatherData.weather[0].main === "Rain" &&
+            Object.assign({}, styles.backImage, styles.rain)) ||
+          (weatherData.weather[0].main === "Snow" &&
+            Object.assign({}, styles.backImage, styles.snow)) ||
+          (weatherData.weather[0].main !==
+            ("Clear" || "Clouds" || "Rain" || "Snow") &&
+            Object.assign({}, styles.backImage, styles.mist))
+        }
+      >
+        <div style={styles.name}>
+          {console.log("fetch")}
+          {weatherData.name}
         </div>
-      )}
+        <div style={styles.results}>
+          <ul style={styles.ul}>
+            <li style={styles.title}>Weather</li>
+            <li style={styles.result}>
+              {weatherData.weather[0].description}
+              {whichIcon}
+            </li>
+          </ul>
+          <ul style={styles.ul}>
+            <li style={styles.title}>Temperature</li>
+            <li
+              style={
+                (weatherData.main.temp - 273.15 <= 15 &&
+                  Object.assign({}, styles.result, styles.lowTemp)) ||
+                (weatherData.main.temp - 273.15 >= 25 &&
+                  Object.assign({}, styles.result, styles.highTemp)) ||
+                Object.assign({}, styles.result, styles.middleTemp)
+              }
+            >
+              {Math.floor((weatherData.main.temp - 273.15) * 10) / 10} ℃
+            </li>
+          </ul>
+          <ul style={styles.ul}>
+            <li style={styles.title}>Wind</li>
+            <li style={styles.result}>{weatherData.wind.speed}</li>
+          </ul>
+        </div>
+      </div>
     </>
   );
 };
