@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from "react";
+import countryCity from "../api/countryCity";
 import {
   clearSky,
   drizzle,
@@ -27,124 +28,254 @@ import ApiKey from "../Secret";
 
 const API_END_POINT = "https://api.openweathermap.org/data/2.5/weather";
 
-// const firstData = async () => {
-//   console.log("firstData:Done");
-//   const word = "Tokyo";
-//   const response = await axios.get(
-//     `${API_END_POINT}?q=${word}&appid=${ApiKey}`
-//   );
-//   const firstResponseObject = response.data;
-//   console.log(response.data);
-//   return firstResponseObject;
-// firstResponseObject = await testData;
-// console.log("firstResponseObject", firstResponseObject);
-// };
-
-// console.log(firstResponseObject);
-
 const fetchWeather = async (word) => {
-  console.log("fetchData:", word);
   const response = await axios.get(
     word === undefined || word === ""
       ? `${API_END_POINT}?q=Tokyo&appid=${ApiKey}`
       : `${API_END_POINT}?q=${word}&appid=${ApiKey}`
   );
   const fetchResponseObject = response.data;
-  console.log(fetchResponseObject);
   return fetchResponseObject;
 };
 
 export const fetchApi = fetchWeather;
 
-//
+//GetApi ---
 
-const ApiResult = () => {
+// UserInput
+
+// export const UserInput = () => {
+//   const [userInputWord, setUserInputWord] = useState("");
+//   const inputWord = (word) => {
+//     const character = /^[a-zA-Z]*$/;
+//     try {
+//       if (word.target.value === "" || character.test(word.target.value)) {
+//         setUserInputWord(word.target.value);
+//       } else {
+//         throw new Error("syntaxError");
+//       }
+//     } catch (e) {
+//       setUserInputWord(e.message);
+//     }
+//   };
+//   return null;
+// <div className="inputArea" style={styles.inputArea}>
+//   <p style={styles.message}>Where do you want to know the weather?</p>
+//   <input
+//     type="text"
+//     placeholder="Tokyo"
+//     onChange={inputWord}
+//     style={styles.request}
+//   />
+//   {(userInputWord === "syntaxError" && (
+//     <p style={styles.eMessage}>
+//       入力エラー：アルファベットで入力してください
+//     </p>
+//   )) ||
+//     (userInputWord !== "syntaxError" && (
+//       <Button userInputWord={userInputWord} />
+//     ))}
+// </div>
+// };
+
+// UserInput----
+
+//Button
+
+// const onClickButton = (userInputWord, fetchApi) => {
+//   console.log(userInputWord);
+//   try {
+//     if (countryCity.includes(userInputWord) || userInputWord === "") {
+//       fetchApi(userInputWord);
+//       console.log("success");
+//     } else {
+//       throw new Error("error:nodata");
+//     }
+//   } catch (e) {
+//     console.log(e.message);
+//   }
+// };
+
+// const Button = ({userInputWord}) => {
+//   return (
+//     <>
+//       <button
+//         style={styles.button}
+//         onClick={() => onClickButton(userInputWord, fetchApi)}
+//       >
+//         <div style={styles.word}>Search</div>
+//       </button>
+//       <div>
+//         {(userInputWord === "" && (
+//           <p>お探しの国または都市名をアルファベットで入力してください。</p>
+//         )) ||
+//           (countryCity.includes(userInputWord) && (
+//             <p>検索結果はこちらになります。</p>
+//           )) || (
+//             <p>
+//               エラー：その国またが都市のデータはありません。入力内容をご確認ください。
+//             </p>
+//           )}
+//       </div>
+//     </>
+//   );
+// };
+
+// Button----
+
+//ApiResult
+
+export const ApiResult = () => {
   // console.log(firstResponseObject, ":", fetchResponseObject);
-  console.log("ApiResult");
-  const [weatherData, setWeatherData] = useState();
+  const [weatherData, setWeatherData] = useState({});
+  const [userInputWord, setUserInputWord] = useState("");
 
-  // useEffect(() => {
-  console.log("Effect");
-  const ResponseObject = fetchWeather();
-  console.log(ResponseObject);
-  setWeatherData(ResponseObject);
-  // }, []);
-
-  // let weatherData;
-  // if (fetchResponseObject) {
-  //   weatherData = fetchResponseObject;
-  // } else {
-  //   weatherData = firstResponseObject;
-  // }
+  useEffect(async () => {
+    const ResponseObject = await fetchApi();
+    setWeatherData(ResponseObject);
+  }, []);
+  //UserInput
+  const inputWord = (word) => {
+    const character = /^[a-zA-Z]*$/;
+    try {
+      if (word.target.value === "" || character.test(word.target.value)) {
+        setUserInputWord(word.target.value);
+      } else {
+        throw new Error("syntaxError");
+      }
+    } catch (e) {
+      setUserInputWord(e.message);
+    }
+  };
+  // onClickButton
+  const onClickButton = async (userInputWord, fetchApi) => {
+    console.log(userInputWord);
+    try {
+      if (countryCity.includes(userInputWord)) {
+        const fetchResponseObject = await fetchApi(userInputWord);
+        setWeatherData(fetchResponseObject);
+        console.log("success");
+      } else {
+        throw new Error("error:nodata");
+      }
+    } catch (e) {
+      console.log(e.message);
+    }
+  };
+  console.log(weatherData);
   let whichIcon;
-  if (weatherData.weather[0].main === "Clouds") {
-    whichIcon = <FaCloud style={styles.icons} />;
-  } else if (weatherData.weather[0].main === "Clear") {
-    whichIcon = <FaRegSun style={styles.icons} />;
-  } else if (weatherData.weather[0].main === "Rain") {
-    whichIcon = <FaUmbrella style={styles.icons} />;
-  } else if (weatherData.weather[0].main === "Snow") {
-    whichIcon = <FaRegSnowflake style={styles.icons} />;
-  } else if (
-    weatherData.weather[0].main !== ("Clear" || "Clouds" || "Rain" || "Snow")
-  ) {
-    whichIcon = <FaRegEyeSlash style={styles.icons} />;
+  if (weatherData && weatherData.weather) {
+    if (weatherData.weather[0].main === "Clouds") {
+      whichIcon = <FaCloud style={styles.icons} />;
+    } else if (weatherData.weather[0].main === "Clear") {
+      whichIcon = <FaRegSun style={styles.icons} />;
+    } else if (weatherData.weather[0].main === "Rain") {
+      whichIcon = <FaUmbrella style={styles.icons} />;
+    } else if (weatherData.weather[0].main === "Snow") {
+      whichIcon = <FaRegSnowflake style={styles.icons} />;
+    } else if (
+      weatherData.weather[0].main !== ("Clear" || "Clouds" || "Rain" || "Snow")
+    ) {
+      whichIcon = <FaRegEyeSlash style={styles.icons} />;
+    }
   }
   return (
     <>
-      <div
-        className="apiResultArea"
-        style={
-          (weatherData.weather[0].main === "Clouds" &&
-            Object.assign({}, styles.backImage, styles.overcastClouds)) ||
-          (weatherData.weather[0].main === "Clear" &&
-            Object.assign({}, styles.backImage, styles.clearSky)) ||
-          (weatherData.weather[0].main === "Rain" &&
-            Object.assign({}, styles.backImage, styles.rain)) ||
-          (weatherData.weather[0].main === "Snow" &&
-            Object.assign({}, styles.backImage, styles.snow)) ||
-          (weatherData.weather[0].main !==
-            ("Clear" || "Clouds" || "Rain" || "Snow") &&
-            Object.assign({}, styles.backImage, styles.mist))
-        }
-      >
-        <div style={styles.name}>
-          {console.log("fetch")}
-          {weatherData.name}
-        </div>
-        <div style={styles.results}>
-          <ul style={styles.ul}>
-            <li style={styles.title}>Weather</li>
-            <li style={styles.result}>
-              {weatherData.weather[0].description}
-              {whichIcon}
-            </li>
-          </ul>
-          <ul style={styles.ul}>
-            <li style={styles.title}>Temperature</li>
-            <li
-              style={
-                (weatherData.main.temp - 273.15 <= 15 &&
-                  Object.assign({}, styles.result, styles.lowTemp)) ||
-                (weatherData.main.temp - 273.15 >= 25 &&
-                  Object.assign({}, styles.result, styles.highTemp)) ||
-                Object.assign({}, styles.result, styles.middleTemp)
-              }
-            >
-              {Math.floor((weatherData.main.temp - 273.15) * 10) / 10} ℃
-            </li>
-          </ul>
-          <ul style={styles.ul}>
-            <li style={styles.title}>Wind</li>
-            <li style={styles.result}>{weatherData.wind.speed}</li>
-          </ul>
-        </div>
+      {/* UserInput */}
+      <div className="inputArea" style={styles.inputArea}>
+        <p style={styles.message}>Where do you want to know the weather?</p>
+        <input
+          type="text"
+          placeholder="Tokyo"
+          onChange={inputWord}
+          style={styles.request}
+        />
+        {(userInputWord === "syntaxError" && (
+          <p style={styles.eMessage}>
+            入力エラー：アルファベットで入力してください
+          </p>
+        )) ||
+          (userInputWord !== "syntaxError" && (
+            // Button
+            <>
+              <button
+                style={styles.button}
+                onClick={() => onClickButton(userInputWord, fetchApi)}
+              >
+                <div style={styles.word}>Search</div>
+              </button>
+              <div>
+                {(userInputWord === "" && (
+                  <p>
+                    お探しの国または都市名をアルファベットで入力してください。
+                  </p>
+                )) ||
+                  (countryCity.includes(userInputWord) && (
+                    <p>検索結果はこちらになります。</p>
+                  )) || (
+                    <p>
+                      エラー：その国またが都市のデータはありません。入力内容をご確認ください。
+                    </p>
+                  )}
+              </div>
+            </>
+            //
+          ))}
       </div>
+      {/*  */}
+      {weatherData && weatherData.weather && (
+        <div
+          className="apiResultArea"
+          style={
+            (weatherData.weather[0].main === "Clouds" &&
+              Object.assign({}, styles.backImage, styles.overcastClouds)) ||
+            (weatherData.weather[0].main === "Clear" &&
+              Object.assign({}, styles.backImage, styles.clearSky)) ||
+            (weatherData.weather[0].main === "Rain" &&
+              Object.assign({}, styles.backImage, styles.rain)) ||
+            (weatherData.weather[0].main === "Snow" &&
+              Object.assign({}, styles.backImage, styles.snow)) ||
+            (weatherData.weather[0].main !==
+              ("Clear" || "Clouds" || "Rain" || "Snow") &&
+              Object.assign({}, styles.backImage, styles.mist))
+          }
+        >
+          <div style={styles.name}>{weatherData.name}</div>
+          <div style={styles.results}>
+            <ul style={styles.ul}>
+              <li style={styles.title}>Weather</li>
+              <li style={styles.result}>
+                {weatherData.weather[0].description}
+                {whichIcon}
+              </li>
+            </ul>
+            <ul style={styles.ul}>
+              <li style={styles.title}>Temperature</li>
+              <li
+                style={
+                  (weatherData.main.temp - 273.15 <= 15 &&
+                    Object.assign({}, styles.result, styles.lowTemp)) ||
+                  (weatherData.main.temp - 273.15 >= 25 &&
+                    Object.assign({}, styles.result, styles.highTemp)) ||
+                  Object.assign({}, styles.result, styles.middleTemp)
+                }
+              >
+                {Math.floor((weatherData.main.temp - 273.15) * 10) / 10} ℃
+              </li>
+            </ul>
+            <ul style={styles.ul}>
+              <li style={styles.title}>Wind</li>
+              <li style={styles.result}>{weatherData.wind.speed}</li>
+            </ul>
+          </div>
+        </div>
+      )}
     </>
   );
 };
 
-export default ApiResult;
+// export default ApiResult;
+
 const styles = {
   results: {
     display: "flex",

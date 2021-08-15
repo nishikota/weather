@@ -1,10 +1,10 @@
-import ApiResult from "./ApiResult";
-import UserInput from "./UserInput";
+import {UserInput, ApiResult} from "./ApiResult";
+// import UserInput from "./ApiResult";
 
 const Weather = () => {
   return (
     <>
-      <UserInput />
+      {/* <UserInput /> */}
       <ApiResult />
     </>
   );
