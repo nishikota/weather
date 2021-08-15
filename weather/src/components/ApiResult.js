@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from "react";
 import countryCity from "../api/countryCity";
+import {fetchApi} from "../api/GetApi";
 import {
   clearSky,
   drizzle,
@@ -18,115 +19,10 @@ import {
   FaCloud,
   FaRegEyeSlash,
 } from "react-icons/fa";
-// import {tokyoData, fetchData} from "../api/GetApi";
-
-//ApiGet
-
-import axios from "axios";
-import ApiKey from "../Secret";
-// import testData from "../api/testData.js";
-
-const API_END_POINT = "https://api.openweathermap.org/data/2.5/weather";
-
-const fetchWeather = async (word) => {
-  const response = await axios.get(
-    word === undefined || word === ""
-      ? `${API_END_POINT}?q=Tokyo&appid=${ApiKey}`
-      : `${API_END_POINT}?q=${word}&appid=${ApiKey}`
-  );
-  const fetchResponseObject = response.data;
-  return fetchResponseObject;
-};
-
-export const fetchApi = fetchWeather;
-
-//GetApi ---
-
-// UserInput
-
-// export const UserInput = () => {
-//   const [userInputWord, setUserInputWord] = useState("");
-//   const inputWord = (word) => {
-//     const character = /^[a-zA-Z]*$/;
-//     try {
-//       if (word.target.value === "" || character.test(word.target.value)) {
-//         setUserInputWord(word.target.value);
-//       } else {
-//         throw new Error("syntaxError");
-//       }
-//     } catch (e) {
-//       setUserInputWord(e.message);
-//     }
-//   };
-//   return null;
-// <div className="inputArea" style={styles.inputArea}>
-//   <p style={styles.message}>Where do you want to know the weather?</p>
-//   <input
-//     type="text"
-//     placeholder="Tokyo"
-//     onChange={inputWord}
-//     style={styles.request}
-//   />
-//   {(userInputWord === "syntaxError" && (
-//     <p style={styles.eMessage}>
-//       入力エラー：アルファベットで入力してください
-//     </p>
-//   )) ||
-//     (userInputWord !== "syntaxError" && (
-//       <Button userInputWord={userInputWord} />
-//     ))}
-// </div>
-// };
-
-// UserInput----
-
-//Button
-
-// const onClickButton = (userInputWord, fetchApi) => {
-//   console.log(userInputWord);
-//   try {
-//     if (countryCity.includes(userInputWord) || userInputWord === "") {
-//       fetchApi(userInputWord);
-//       console.log("success");
-//     } else {
-//       throw new Error("error:nodata");
-//     }
-//   } catch (e) {
-//     console.log(e.message);
-//   }
-// };
-
-// const Button = ({userInputWord}) => {
-//   return (
-//     <>
-//       <button
-//         style={styles.button}
-//         onClick={() => onClickButton(userInputWord, fetchApi)}
-//       >
-//         <div style={styles.word}>Search</div>
-//       </button>
-//       <div>
-//         {(userInputWord === "" && (
-//           <p>お探しの国または都市名をアルファベットで入力してください。</p>
-//         )) ||
-//           (countryCity.includes(userInputWord) && (
-//             <p>検索結果はこちらになります。</p>
-//           )) || (
-//             <p>
-//               エラー：その国またが都市のデータはありません。入力内容をご確認ください。
-//             </p>
-//           )}
-//       </div>
-//     </>
-//   );
-// };
-
-// Button----
 
 //ApiResult
 
 export const ApiResult = () => {
-  // console.log(firstResponseObject, ":", fetchResponseObject);
   const [weatherData, setWeatherData] = useState({});
   const [userInputWord, setUserInputWord] = useState("");
 

@@ -1,4 +1,4 @@
-import Weather from "../components/Weather";
+import {ApiResult} from "../components/ApiResult";
 
 const Screen = () => {
   return (
@@ -7,7 +7,7 @@ const Screen = () => {
         <div style={styles.title}>Weather Checker</div>
         <p style={styles.subTitle}>Do you know the weather in your city ? </p>
       </div>
-      <Weather />
+      <ApiResult />
     </div>
   );
 };
