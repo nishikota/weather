@@ -1,4 +1,5 @@
 const UserInput = (inputWord) => {
+  console.log(inputWord);
   return (
     <input
       type="text"

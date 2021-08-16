@@ -1,9 +1,6 @@
-const Button = (onClickButton, userInputWord, fetchApi) => {
+const Button = (onClickButton) => {
   return (
-    <button
-      style={styles.button}
-      onClick={() => onClickButton(userInputWord, fetchApi)}
-    >
+    <button style={styles.button} onClick={onClickButton}>
       <div style={styles.word}>Search</div>
     </button>
   );

@@ -34,17 +34,23 @@ export const ApiResult = () => {
   }, []);
   //UserInput
   const inputWord = (word) => {
+    console.log(word);
     const character = /^[a-zA-Z]*$/;
     try {
+      console.log("try");
       if (word.target.value === "" || character.test(word.target.value)) {
+        console.log("success");
         setUserInputWord(word.target.value);
       } else {
         throw new Error("syntaxError");
       }
     } catch (e) {
+      console.log("false");
       setUserInputWord(e.message);
     }
   };
+  console.log(inputWord);
+  console.log(userInputWord);
   // onClickButton
   const onClickButton = async (userInputWord, fetchApi) => {
     console.log(userInputWord);
@@ -91,11 +97,7 @@ export const ApiResult = () => {
           (userInputWord !== "syntaxError" && (
             // Button
             <>
-              <Button
-                onClickButton={onClickButton}
-                userInputWord={userInputWord}
-                fetchApi={fetchApi}
-              />
+              <Button onClickButton={onClickButton} />
               <div>
                 {(userInputWord === "" && (
                   <p>
@@ -114,7 +116,6 @@ export const ApiResult = () => {
             //
           ))}
       </div>
-      {/*  */}
       {weatherData && weatherData.weather && (
         <div
           className="apiResultArea"
