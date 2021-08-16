@@ -1,6 +1,8 @@
 import React, {useState, useEffect} from "react";
 import countryCity from "../api/countryCity";
 import {fetchApi} from "../api/GetApi";
+import Button from "./Button";
+import UserInput from "./UserInput";
 import {
   clearSky,
   drizzle,
@@ -58,7 +60,7 @@ export const ApiResult = () => {
       console.log(e.message);
     }
   };
-  console.log(weatherData);
+
   let whichIcon;
   if (weatherData && weatherData.weather) {
     if (weatherData.weather[0].main === "Clouds") {
@@ -80,12 +82,7 @@ export const ApiResult = () => {
       {/* UserInput */}
       <div className="inputArea" style={styles.inputArea}>
         <p style={styles.message}>Where do you want to know the weather?</p>
-        <input
-          type="text"
-          placeholder="Tokyo"
-          onChange={inputWord}
-          style={styles.request}
-        />
+        <UserInput inputWord={inputWord} />
         {(userInputWord === "syntaxError" && (
           <p style={styles.eMessage}>
             入力エラー：アルファベットで入力してください
@@ -94,12 +91,11 @@ export const ApiResult = () => {
           (userInputWord !== "syntaxError" && (
             // Button
             <>
-              <button
-                style={styles.button}
-                onClick={() => onClickButton(userInputWord, fetchApi)}
-              >
-                <div style={styles.word}>Search</div>
-              </button>
+              <Button
+                onClickButton={onClickButton}
+                userInputWord={userInputWord}
+                fetchApi={fetchApi}
+              />
               <div>
                 {(userInputWord === "" && (
                   <p>
@@ -197,6 +193,20 @@ const styles = {
   },
   highTemp: {
     color: "red",
+  },
+  inputArea: {
+    paddingBottom: "4rem",
+    textAlign: "center",
+  },
+  message: {
+    fontSize: "1rem",
+    marginTop: "3rem",
+    opacity: "0.6",
+  },
+  eMessage: {
+    fontSize: "0.5rem",
+    color: "red",
+    margin: "auto",
   },
   title: {
     fontSize: "1.3rem",
