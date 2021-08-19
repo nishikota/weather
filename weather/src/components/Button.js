@@ -1,4 +1,4 @@
-const Button = (onClickButton) => {
+const Button = ({onClickButton}) => {
   return (
     <button style={styles.button} onClick={onClickButton}>
       <div style={styles.word}>Search</div>

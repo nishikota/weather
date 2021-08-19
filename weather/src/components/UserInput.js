@@ -1,4 +1,4 @@
-const UserInput = (inputWord) => {
+const UserInput = ({inputWord}) => {
   console.log(inputWord);
   return (
     <input
