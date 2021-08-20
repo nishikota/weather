@@ -27,6 +27,7 @@ import {
 export const ApiResult = () => {
   const [weatherData, setWeatherData] = useState({});
   const [userInputWord, setUserInputWord] = useState("");
+  const [tempCelsius, setTempCelsius] = useState(true);
 
   useEffect(async () => {
     const ResponseObject = await fetchApi();
@@ -56,6 +57,13 @@ export const ApiResult = () => {
       }
     } catch (e) {
       console.log(e.message);
+    }
+  };
+  const tempSwitch = () => {
+    if (tempCelsius === false) {
+      setTempCelsius(true);
+    } else {
+      setTempCelsius(false);
     }
   };
 
@@ -127,6 +135,7 @@ export const ApiResult = () => {
         >
           <div style={styles.name}>{weatherData.name}</div>
           <div style={styles.results}>
+            <Button tempSwitch={tempSwitch} />
             <ul style={styles.ul}>
               <li style={styles.title}>Weather</li>
               <li style={styles.result}>
@@ -138,15 +147,25 @@ export const ApiResult = () => {
               <li style={styles.title}>Temperature</li>
               <li
                 style={
-                  (weatherData.main.temp - 273.15 <= 15 &&
-                    Object.assign({}, styles.result, styles.lowTemp)) ||
-                  (weatherData.main.temp - 273.15 >= 25 &&
-                    Object.assign({}, styles.result, styles.highTemp)) ||
-                  Object.assign({}, styles.result, styles.middleTemp)
+                  tempCelsius === false
+                    ? (weatherData.main.temp <= 15 + 273.15 &&
+                        Object.assign({}, styles.result, styles.lowTemp)) ||
+                      (weatherData.main.temp >= 25 + 273.15 &&
+                        Object.assign({}, styles.result, styles.highTemp)) ||
+                      Object.assign({}, styles.result, styles.middleTemp)
+                    : (weatherData.main.temp - 273.15 <= 15 &&
+                        Object.assign({}, styles.result, styles.lowTemp)) ||
+                      (weatherData.main.temp - 273.15 >= 25 &&
+                        Object.assign({}, styles.result, styles.highTemp)) ||
+                      Object.assign({}, styles.result, styles.middleTemp)
                 }
               >
-                {Math.floor((weatherData.main.temp - 273.15) * 10) / 10} ℃
+                {tempCelsius === false
+                  ? Math.floor(weatherData.main.temp * 10) / 10
+                  : Math.floor((weatherData.main.temp - 273.15) * 10) / 10}{" "}
+                ℃
               </li>
+              )
             </ul>
             <ul style={styles.ul}>
               <li style={styles.title}>Wind</li>
