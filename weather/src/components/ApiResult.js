@@ -34,31 +34,23 @@ export const ApiResult = () => {
   }, []);
   //UserInput
   const inputWord = (word) => {
-    console.log(word);
     const character = /^[a-zA-Z]*$/;
     try {
-      console.log("try");
       if (word.target.value === "" || character.test(word.target.value)) {
-        console.log("success");
         setUserInputWord(word.target.value);
       } else {
         throw new Error("syntaxError");
       }
     } catch (e) {
-      console.log("false");
       setUserInputWord(e.message);
     }
   };
-  console.log(inputWord);
-  console.log(userInputWord);
   // onClickButton
-  const onClickButton = async (userInputWord, fetchApi) => {
-    console.log(userInputWord);
+  const onClickButton = async () => {
     try {
       if (countryCity.includes(userInputWord)) {
         const fetchResponseObject = await fetchApi(userInputWord);
         setWeatherData(fetchResponseObject);
-        console.log("success");
       } else {
         throw new Error("error:nodata");
       }
